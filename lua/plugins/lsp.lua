@@ -45,6 +45,7 @@ return {
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*.go",
       callback = function()
+        vim.diagnostic.reset(nil, 0)
         vim.lsp.buf.format({ async = false })
       end,
     })

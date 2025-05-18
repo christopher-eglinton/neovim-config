@@ -16,7 +16,6 @@ return {
         "cssls",
         "clangd",
       },
-      automatic_installation = true,
     })
   end,
 }
