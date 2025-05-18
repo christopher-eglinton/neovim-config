@@ -18,6 +18,8 @@ local plugin_files = {
   "plugins.indent",
   "plugins.comment",
   "plugins.cmp",
+  "plugins.limelight",
+  "plugins.goyo",
 }
 
 for _, file in ipairs(plugin_files) do

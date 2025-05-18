@@ -10,5 +10,8 @@ require("config.mappings")
 -- bison startscreen
 require("config.startscreen")
 
+-- journal-mode
+require("config.journal")
+
 -- plugins
 require("plugins")

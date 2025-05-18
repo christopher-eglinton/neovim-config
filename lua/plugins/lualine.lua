@@ -2,6 +2,14 @@ return {
   "nvim-lualine/lualine.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
+    local function word_count()
+      if not _G.goyo_active then
+        return ""
+      end
+      local wc = vim.fn.wordcount()
+      return "Words: " .. wc.words
+    end
+
     require("lualine").setup({
       options = {
         theme = "auto",
@@ -11,8 +19,7 @@ return {
       sections = {
         lualine_a = { "mode" },
         lualine_b = { "branch", "diff" },
-        lualine_c = { "filename" },
-
+        lualine_c = { "filename", word_count }, -- ✅ add word_count here
         lualine_x = {
           {
             function()
@@ -32,7 +39,6 @@ return {
           },
           "encoding", "fileformat", "filetype",
         },
-
         lualine_y = { "progress" },
         lualine_z = { "location" },
       },

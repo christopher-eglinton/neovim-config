@@ -37,4 +37,3 @@ vim.opt.foldlevel = 99             -- open all folds by default
 
 -- stops annoying lsp symbols from julting text.
 vim.opt.signcolumn = "yes"
-
