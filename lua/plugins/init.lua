@@ -14,9 +14,10 @@ local plugin_files = {
 	"plugins.lualine",
 	"plugins.telescope",
 	"plugins.lsp",
-    "plugins.mason",
-    "plugins.indent",
-    "plugins.comment",
+  "plugins.mason",
+  "plugins.indent",
+  "plugins.comment",
+  "plugins.cmp",
 }
 
 for _, file in ipairs(plugin_files) do

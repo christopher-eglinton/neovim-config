@@ -2,6 +2,7 @@ return {
   "neovim/nvim-lspconfig",
   config = function()
     local lspconfig = require("lspconfig")
+    local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
     vim.diagnostic.config({
       virtual_text = false,
@@ -27,8 +28,11 @@ return {
     vim.o.updatetime = 250
 
     lspconfig.gopls.setup({
+      capabilities = capabilities,
       settings = {
         gopls = {
+          completeUnimported = true,
+          usePlaceholders = true,
           gofumpt = true,
           analyses = {
             unusedparams = true,
@@ -36,6 +40,13 @@ return {
           staticcheck = true,
         },
       },
+    })
+
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      pattern = "*.go",
+      callback = function()
+        vim.lsp.buf.format({ async = false })
+      end,
     })
 
     lspconfig.lua_ls.setup({

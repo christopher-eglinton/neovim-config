@@ -14,8 +14,8 @@ vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
 -- tab settings
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 -- this activates line numbers after entering a file since we want them disabled
