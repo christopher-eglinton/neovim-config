@@ -4,7 +4,7 @@ return {
     local lspconfig = require("lspconfig")
 
     vim.diagnostic.config({
-      virtual_text = true,
+      virtual_text = false,
       signs = {
         text = {
           [vim.diagnostic.severity.ERROR] = "",
@@ -17,6 +17,14 @@ return {
       update_in_insert = false,
       severity_sort = true,
     })
+
+    vim.api.nvim_create_autocmd("CursorHold", {
+        callback = function()
+            vim.diagnostic.open_float(nil, {focus = false, border = "rounded"})
+        end,
+    })
+
+    vim.o.updatetime = 250
 
     lspconfig.gopls.setup({
       settings = {

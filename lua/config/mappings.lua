@@ -35,3 +35,15 @@ end, { desc = "toggle netrw" })
 
 -- allow <leader>y to write to system clipboard.
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
+
+-- commenting with <leader>/ instead of gcc, gb, gc
+-- for normal mode: comment current line
+vim.keymap.set("n", "<leader>/", function()
+  require("Comment.api").toggle.linewise.current()
+end, { desc = "Toggle comment" })
+
+-- for visual mode: comment selection
+vim.keymap.set("v", "<leader>/", ":<C-u>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", {
+  desc = "Toggle comment (visual)"
+})
+

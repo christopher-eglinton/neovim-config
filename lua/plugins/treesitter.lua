@@ -5,6 +5,7 @@ return {
     require("nvim-treesitter.configs").setup({
       ensure_installed = { "lua", "go", "python" },
       highlight = { enable = true },
+      indent = { enable = true },
     })
   end,
 }

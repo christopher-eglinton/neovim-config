@@ -15,9 +15,11 @@ local plugin_files = {
 	"plugins.telescope",
 	"plugins.lsp",
     "plugins.mason",
+    "plugins.indent",
+    "plugins.comment",
 }
 
-for _, file in ipairs(plugin_files) do 
+for _, file in ipairs(plugin_files) do
 	local plugin = require(file)
 	table.insert(plugins, plugin)
 end
