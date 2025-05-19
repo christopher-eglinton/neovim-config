@@ -24,13 +24,17 @@ end, { desc = "toggle netrw" })
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to clipboard" })
 
 -- commenting with <leader>/ instead of gcc, gb, gc
--- for normal mode: comment current line
 vim.keymap.set("n", "<leader>/", function()
   require("Comment.api").toggle.linewise.current()
-end, { desc = "toggle comment" })
+end, { desc = "toggle comment" }) -- for normal mode: comment current line
 
--- for visual mode: comment selection
 vim.keymap.set("v", "<leader>/", ":<C-u>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", {
   desc = "toggle comment (visual)"
-})
+}) -- for visual mode: comment selection
 
+-- tab settings
+vim.keymap.set("n", "<Tab>", ":tabnext<CR>", { noremap = true, silent = true }) -- move to next tab
+vim.keymap.set("n", "<S-Tab>", ":tabprevious<CR>", { noremap = true, silent = true }) -- move to last tab
+vim.keymap.set("n", "<leader>tn", ":tabnew<CR>", { noremap = true, silent = true }) -- opens new tab
+vim.keymap.set("n", "<leader>te", ":tabedit ", { noremap = true }) -- waits for filename
+vim.keymap.set("n", "<leader>tx", ":tabclose<CR>", { noremap = true, silent = true }) -- closes tab
