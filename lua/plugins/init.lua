@@ -20,6 +20,7 @@ local plugin_files = {
   "plugins.cmp",
   "plugins.limelight",
   "plugins.goyo",
+  "plugins.gitsigns",
 }
 
 for _, file in ipairs(plugin_files) do

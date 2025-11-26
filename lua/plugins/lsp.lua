@@ -34,6 +34,9 @@ return {
           completeUnimported = true,
           usePlaceholders = true,
           gofumpt = true,
+          buildFlags = {
+            "-tags=integration"
+          },
           analyses = {
             unusedparams = true,
           },
@@ -67,6 +70,53 @@ return {
     })
 
     lspconfig.clangd.setup({})
+
+     lspconfig.phpactor.setup({
+      cmd = { "phpactor", "language-server" },
+      filetypes = { "php" },
+      root_dir = function(fname)
+        local util = require("lspconfig.util")
+        return util.root_pattern("composer.json", ".git")(fname) or vim.fs.dirname(fname)
+      end,
+      capabilities = capabilities,
+      settings = {
+        phpactor = {
+        },
+      },
+    })
+
+    lspconfig.pylsp.setup({
+      cmd = { vim.fn.stdpath("data") .. "/mason/bin/pylsp" },
+      settings = {
+        pylsp = {
+          plugins = {
+            pyflakes = { enabled = true },
+            pycodestyle = { enabled = true },
+            autopep8 = { enabled = true },
+            mccabe = { enabled = false },
+            black = { enabled = false },
+            yapf = { enabled = false },
+            ruff = { enabled = false },
+            pylsp_mypy = { enabled = false },
+          },
+        },
+      },
+      on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          buffer = bufnr,
+          callback = function()
+            vim.lsp.buf.format({ async = false })
+          end,
+        })
+      end,
+    })
+
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      pattern = "*.py",
+      callback = function()
+        vim.lsp.buf.format({ async = false })
+      end,
+    })
 
   end,
 }

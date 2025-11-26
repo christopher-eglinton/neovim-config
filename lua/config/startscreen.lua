@@ -1,13 +1,13 @@
 -- start screen ascii art, credit: https://www.asciiart.eu/animals/bisons
 local bison_block = [[
-            _.-````'-,_
-     _,.,_ ,-'`           `'-.,_
+              _.-````'-,_
+    _,.,_ ,-'`           `'-.,_
   /)     (\                   '``-.
  ((      ) )                      `\
   \)    (_/                        )\
-  |       /)           '    ,'    / \
-  `\    ^'            '     (    /  ))
-    |      _/\ ,     /    ,,`\   (  "`
+  |       /)           '    ,'    /  \
+  `\    ^'            '     (    /   ))
+    |      _/\ ,     /    ,,`\   (   "`
      \Y,   |  \  \  | ````| / \_ \
        `)_/    \  \  )    ( >  ( >
                 \( \(     |/   |/
@@ -19,9 +19,9 @@ local shortcuts = {
   "",
   "",
   "",
-  "     [f] Find File",
-  "     [r] Recent Files",
-  "     [q] Quit",
+  "     recent files                  [r]",
+  "     find file                     [f]",
+  "     quit                          [q]",
 }
 
 local function to_lines(block)
@@ -87,4 +87,3 @@ vim.api.nvim_create_autocmd("VimEnter", {
     vim.keymap.set("n", "q", ":qa<CR>", { buffer = true, silent = true })
   end,
 })
-

@@ -32,6 +32,38 @@ vim.keymap.set("v", "<leader>/", ":<C-u>lua require('Comment.api').toggle.linewi
   desc = "toggle comment (visual)"
 }) -- for visual mode: comment selection
 
+-- go to function definition
+vim.keymap.set("n", "<leader>gd", function()
+  -- get the active LSP client
+  local client = vim.lsp.get_clients({ bufnr = 0 })[1]
+  if not client then
+    print("No LSP client")
+    return
+  end
+
+  -- create params with explicit position_encoding
+  local params = vim.lsp.util.make_position_params(nil, client.offset_encoding)
+
+  vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result)
+    if err or not result or vim.tbl_isempty(result) then
+      print("Definition not found")
+      return
+    end
+
+    local def = result[1]
+    local uri = def.uri or def.targetUri
+    local fname = vim.uri_to_fname(uri)
+
+    -- open new tab only if definition is in another file
+    if fname ~= vim.api.nvim_buf_get_name(0) then
+      vim.cmd("tabnew " .. fname)
+      vim.lsp.util.jump_to_location(def, client.offset_encoding)
+    else
+      vim.lsp.util.jump_to_location(def, client.offset_encoding)
+    end
+  end)
+end, { desc = "Go to definition in a new tab (smart)" })
+
 -- tab settings
 vim.keymap.set("n", "<Tab>", ":tabnext<CR>", { noremap = true, silent = true }) -- move to next tab
 vim.keymap.set("n", "<S-Tab>", ":tabprevious<CR>", { noremap = true, silent = true }) -- move to last tab
