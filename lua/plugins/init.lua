@@ -21,6 +21,9 @@ local plugin_files = {
   "plugins.limelight",
   "plugins.goyo",
   "plugins.gitsigns",
+  "plugins.render-markdown",
+  "plugins.dadbod",
+  "plugins.orgmode",
 }
 
 for _, file in ipairs(plugin_files) do

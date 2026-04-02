@@ -30,10 +30,16 @@ vim.api.nvim_create_autocmd("BufEnter", {
 })
 
 -- treesitter stuff
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-vim.opt.foldenable = true           -- start with folding enabled
-vim.opt.foldlevel = 99             -- open all folds by default
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- vim.opt.foldenable = true           -- start with folding enabled
+-- vim.opt.foldlevel = 99             -- open all folds by default
 
 -- stops annoying lsp symbols from julting text.
 vim.opt.signcolumn = "yes"
+
+-- folding
+vim.opt.foldmethod = "manual"
+vim.opt.foldenable = true
+vim.opt.foldlevel = 99
+

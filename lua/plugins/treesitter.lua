@@ -3,7 +3,7 @@ return {
   build = ":TSUpdate",
   config = function()
     require("nvim-treesitter.configs").setup({
-      ensure_installed = { "lua", "go", "python" },
+      ensure_installed = { "lua", "go", "python", "markdown", "markdown_inline" },
       highlight = { enable = true },
       indent = { enable = true },
     })
