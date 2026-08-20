@@ -34,35 +34,95 @@ vim.keymap.set("v", "<leader>/", ":<C-u>lua require('Comment.api').toggle.linewi
 
 -- go to function definition
 vim.keymap.set("n", "<leader>gd", function()
-  -- get the active LSP client
-  local client = vim.lsp.get_clients({ bufnr = 0 })[1]
-  if not client then
-    print("No LSP client")
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+
+  if #clients == 0 then
+    vim.notify("No LSP client", vim.log.levels.WARN)
     return
   end
 
-  -- create params with explicit position_encoding
-  local params = vim.lsp.util.make_position_params(nil, client.offset_encoding)
+  local client = clients[1]
 
-  vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result)
-    if err or not result or vim.tbl_isempty(result) then
-      print("Definition not found")
+  local params = vim.lsp.util.make_position_params(
+    0,
+    client.offset_encoding or "utf-16"
+  )
+
+  vim.lsp.buf_request(0, "textDocument/definition", params, function(err, result, ctx)
+    if err then
+      vim.notify(err.message or "LSP error", vim.log.levels.ERROR)
       return
     end
 
-    local def = result[1]
-    local uri = def.uri or def.targetUri
-    local fname = vim.uri_to_fname(uri)
+    if not result or vim.tbl_isempty(result) then
+      vim.notify("Definition not found", vim.log.levels.INFO)
+      return
+    end
 
-    -- open new tab only if definition is in another file
-    if fname ~= vim.api.nvim_buf_get_name(0) then
-      vim.cmd("tabnew " .. fname)
-      vim.lsp.util.jump_to_location(def, client.offset_encoding)
-    else
-      vim.lsp.util.jump_to_location(def, client.offset_encoding)
+    local def = vim.islist(result) and result[1] or result
+
+    local uri = def.uri or def.targetUri
+    if not uri then
+      vim.notify("Definition has no URI", vim.log.levels.ERROR)
+      return
+    end
+
+    local fname = vim.uri_to_fname(uri)
+    local current = vim.api.nvim_buf_get_name(0)
+
+    -- if target file is already open in another tab, switch to it
+    if fname ~= current then
+      local found = false
+
+      for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+        for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+          local buf = vim.api.nvim_win_get_buf(win)
+          local bufname = vim.api.nvim_buf_get_name(buf)
+
+          if bufname == fname then
+            vim.api.nvim_set_current_tabpage(tab)
+            vim.api.nvim_set_current_win(win)
+            found = true
+            break
+          end
+        end
+
+        if found then
+          break
+        end
+      end
+
+      -- file not already open anywhere
+      if not found then
+        vim.cmd("tabnew")
+      end
+    end
+
+    local target_client = vim.lsp.get_client_by_id(ctx.client_id)
+
+    local offset_encoding = target_client
+        and target_client.offset_encoding
+        or client.offset_encoding
+        or "utf-16"
+
+    local ok, res = pcall(
+      vim.lsp.util.show_document,
+      def,
+      offset_encoding,
+      {
+        reuse_win = false,
+        focus = true,
+      }
+    )
+
+    if not ok then
+      vim.notify(
+        "Could not open definition: " .. tostring(res),
+        vim.log.levels.ERROR
+      )
     end
   end)
-end, { desc = "Go to definition in a new tab (smart)" })
+end, { desc = "Go to definition in smart tab" })
 
 -- tab settings
 vim.keymap.set("n", "<Tab>", ":tabnext<CR>", { noremap = true, silent = true }) -- move to next tab
@@ -70,3 +130,8 @@ vim.keymap.set("n", "<S-Tab>", ":tabprevious<CR>", { noremap = true, silent = tr
 vim.keymap.set("n", "<leader>tn", ":tabnew<CR>", { noremap = true, silent = true }) -- opens new tab
 vim.keymap.set("n", "<leader>te", ":tabedit ", { noremap = true }) -- waits for filename
 vim.keymap.set("n", "<leader>tx", ":tabclose<CR>", { noremap = true, silent = true }) -- closes tab
+
+-- git blame current line
+vim.keymap.set("n", "<leader>gb", function()
+  require("config.git").blame_line()
+end, { desc = "Git blame current line" })
