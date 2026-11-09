@@ -43,3 +43,6 @@ vim.opt.foldmethod = "manual"
 vim.opt.foldenable = true
 vim.opt.foldlevel = 99
 
+
+-- colors
+vim.opt.termguicolors = true

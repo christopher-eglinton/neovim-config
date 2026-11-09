@@ -24,6 +24,7 @@ local plugin_files = {
   "plugins.render-markdown",
   "plugins.dadbod",
   "plugins.orgmode",
+  "plugins.todo-comments",
 }
 
 for _, file in ipairs(plugin_files) do

@@ -128,5 +128,19 @@ return {
       end,
     })
     vim.lsp.enable("pylsp")
+
+    vim.lsp.config("twiggy_language_server", {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      settings = {
+        twiggy = {
+          framework = "ignore",
+          diagnostics = {
+            twigCsFixer = false,
+          },
+        },
+      },
+    })
+    vim.lsp.enable("twiggy_language_server")
   end,
 }
